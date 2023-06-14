@@ -7,6 +7,8 @@ const modal = document.querySelector('.modal')
 const overlay = document.querySelector('.overlay')
 const btnCloseModal = document.querySelector('.btn--close-modal')
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal')
+const btnScrollTo = document.querySelector('.btn--scroll-to')
+const section1 = document.querySelector('#section--1')
 
 const openModal = e => {
 	e.preventDefault()
@@ -19,6 +21,26 @@ const closeModal = () => {
 	overlay.classList.add('hidden')
 }
 
+const createCookieMessage = () => {
+	const message = document.createElement('div')
+
+	message.classList.add('cookie-message')
+	message.innerHTML =
+		'We use cookied for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>'
+	header.append(message)
+
+	//Delete cookie element
+
+	document.querySelector('.btn--close-cookie').addEventListener('click', () => message.remove())
+
+	//styles
+
+	message.style.backgroundColor = '#37383d'
+	message.style.width = '120%'
+	message.style.height = Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px'
+}
+createCookieMessage()
+
 btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal))
 
 btnCloseModal.addEventListener('click', closeModal)
@@ -30,22 +52,17 @@ document.addEventListener('keydown', function (e) {
 	}
 })
 
-const message = document.createElement('div')
+btnScrollTo.addEventListener('click', e => {
+	section1.scrollIntoView({ behavior: 'smooth' })
+})
 
-message.classList.add('cookie-message')
-message.innerHTML =
-	'We use cookied for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>'
-header.append(message)
+//Implementing smoot scroll navigation
 
-//Delete elements
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+	e.preventDefault()
+	if (e.target.classList.contains('nav__link')) {
+		const targetSection = e.target.getAttribute('href')
+		document.querySelector(targetSection).scrollIntoView({ behavior: 'smooth' })
+	}
+})
 
-document.querySelector('.btn--close-cookie').addEventListener('click', () => message.remove())
-
-//styles
-
-message.style.backgroundColor = '#37383d'
-message.style.width = '120%'
-message.style.height = Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px'
-
-const btnScrollTo = document.querySelector('.btn--scroll-to')
-const section1 = document.querySelector('#section--1')
