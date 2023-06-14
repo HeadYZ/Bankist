@@ -7,8 +7,15 @@ const modal = document.querySelector('.modal')
 const overlay = document.querySelector('.overlay')
 const btnCloseModal = document.querySelector('.btn--close-modal')
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal')
+
+//smooth scroll
 const btnScrollTo = document.querySelector('.btn--scroll-to')
 const section1 = document.querySelector('#section--1')
+
+//tab component
+const tabContainer = document.querySelector('.operations__tab-container')
+const allTabs = tabContainer.querySelectorAll('.operations__tab')
+const allTabsContent = document.querySelectorAll('.operations__content')
 
 const openModal = e => {
 	e.preventDefault()
@@ -66,3 +73,17 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 	}
 })
 
+//implementing tab component
+
+tabContainer.addEventListener('click', e => {
+	const clickedTab = e.target.closest('.operations__tab')
+
+	if (!clickedTab) return
+
+	allTabs.forEach(tab => tab.classList.remove('operations__tab--active'))
+	clickedTab.classList.add('operations__tab--active')
+
+	allTabsContent.forEach(content => content.classList.remove('operations__content--active'))
+
+	document.querySelector(`.operations__content--${clickedTab.dataset.tab}`).classList.add('operations__content--active')
+})
