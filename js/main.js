@@ -17,6 +17,8 @@ const tabContainer = document.querySelector('.operations__tab-container')
 const allTabs = tabContainer.querySelectorAll('.operations__tab')
 const allTabsContent = document.querySelectorAll('.operations__content')
 
+//nav
+const nav = document.querySelector('.nav')
 const openModal = e => {
 	e.preventDefault()
 	modal.classList.remove('hidden')
@@ -87,3 +89,21 @@ tabContainer.addEventListener('click', e => {
 
 	document.querySelector(`.operations__content--${clickedTab.dataset.tab}`).classList.add('operations__content--active')
 })
+
+//implementing menu fade animation
+
+const handlerNavFade = function (e) {
+	if (e.target.classList.contains('nav__link')) {
+		const clickedLink = e.target
+		const siblings = clickedLink.closest('.nav').querySelectorAll('.nav__link')
+		const logo = clickedLink.closest('.nav').querySelector('img')
+		siblings.forEach(link => {
+			if (link !== clickedLink) link.style.opacity = this
+		})
+		logo.style.opacity = this
+	}
+}
+
+nav.addEventListener('mouseover', handlerNavFade.bind(0.5))
+nav.addEventListener('mouseout', handlerNavFade.bind(1))
+
