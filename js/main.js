@@ -22,6 +22,7 @@ const nav = document.querySelector('.nav')
 const navHeight = nav.getBoundingClientRect().height
 
 const allSection = document.querySelectorAll('.section')
+const allLazyImg = document.querySelectorAll('img[data-src]')
 
 const openModal = e => {
 	e.preventDefault()
@@ -143,7 +144,24 @@ allSection.forEach(section => {
 	sectionObserver.observe(section)
 })
 
+// lazy img
 
+const loadImg = entries => {
+	const [entry] = entries
+
+	if (!entry.isIntersecting) return
+
+	entry.target.src = entry.target.dataset.src
+	entry.target.addEventListener('load', () => {
+		entry.target.classList.remove('lazy-img')
+	})
+}
+
+const imgObserver = new IntersectionObserver(loadImg, { root: null, threshold: 0 })
+
+allLazyImg.forEach(img => {
+	imgObserver.observe(img)
+})
 
 //listeners
 
