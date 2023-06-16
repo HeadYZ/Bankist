@@ -23,6 +23,9 @@ const navHeight = nav.getBoundingClientRect().height
 
 const allSection = document.querySelectorAll('.section')
 const allLazyImg = document.querySelectorAll('img[data-src]')
+const allSlides = document.querySelectorAll('.slide')
+const sliderBtnRight = document.querySelector('.slider__btn--right')
+const sliderBtnLeft = document.querySelector('.slider__btn--left')
 
 const openModal = e => {
 	e.preventDefault()
@@ -127,22 +130,22 @@ headerObserver.observe(header)
 
 //revealing section + observer
 
-const revealSection = entries => {
-	const [entry] = entries
-	if (!entry.isIntersecting) return
+// const revealSection = entries => {
+// 	const [entry] = entries
+// 	if (!entry.isIntersecting) return
 
-	entry.target.classList.remove('section--hidden')
-	sectionObserver.unobserve(entry.target)
-}
+// 	entry.target.classList.remove('section--hidden')
+// 	sectionObserver.unobserve(entry.target)
+// }
 
-const sectionObserver = new IntersectionObserver(revealSection, {
-	root: null,
-	threshold: 0.15,
-})
-allSection.forEach(section => {
-	section.classList.add('section--hidden')
-	sectionObserver.observe(section)
-})
+// const sectionObserver = new IntersectionObserver(revealSection, {
+// 	root: null,
+// 	threshold: 0.15,
+// })
+// allSection.forEach(section => {
+// 	section.classList.add('section--hidden')
+// 	sectionObserver.observe(section)
+// })
 
 // lazy img
 
@@ -155,15 +158,41 @@ const loadImg = entries => {
 	entry.target.addEventListener('load', () => {
 		entry.target.classList.remove('lazy-img')
 	})
+	imgObserver.unobserve(entry.target)
 }
 
-const imgObserver = new IntersectionObserver(loadImg, { root: null, threshold: 0 })
+const imgObserver = new IntersectionObserver(loadImg, { root: null, threshold: 0, rootMargin: '200px' })
 
 allLazyImg.forEach(img => {
 	imgObserver.observe(img)
 })
 
+// slider
+let curSlide = 0
+const lastSlide = allSlides.length - 1
+
+const goToSlide = slide => {
+	allSlides.forEach((s, i) => {
+		s.style.transform = `translateX(${100 * (i - slide)}%)`
+	})
+}
+goToSlide(0)
+
+const nextSlide = () => {
+	if (curSlide === lastSlide) curSlide = 0
+	else curSlide++
+	goToSlide(curSlide)
+}
+const prevSlide = () => {
+	if (curSlide === 0) curSlide = lastSlide
+	else curSlide--
+	goToSlide(curSlide)
+}
+
 //listeners
 
 nav.addEventListener('mouseover', handlerNavFade.bind(0.5))
 nav.addEventListener('mouseout', handlerNavFade.bind(1))
+
+sliderBtnRight.addEventListener('click', nextSlide)
+sliderBtnLeft.addEventListener('click', prevSlide)
