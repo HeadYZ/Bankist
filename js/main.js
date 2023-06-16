@@ -21,6 +21,8 @@ const allTabsContent = document.querySelectorAll('.operations__content')
 const nav = document.querySelector('.nav')
 const navHeight = nav.getBoundingClientRect().height
 
+const allSection = document.querySelectorAll('.section')
+
 const openModal = e => {
 	e.preventDefault()
 	modal.classList.remove('hidden')
@@ -121,6 +123,29 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 	rootMargin: `-${navHeight}px`,
 })
 headerObserver.observe(header)
+
+//revealing section + observer
+
+const revealSection = entries => {
+	const [entry] = entries
+	if (!entry.isIntersecting) return
+
+	entry.target.classList.remove('section--hidden')
+	sectionObserver.unobserve(entry.target)
+}
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+	root: null,
+	threshold: 0.15,
+})
+allSection.forEach(section => {
+	section.classList.add('section--hidden')
+	sectionObserver.observe(section)
+})
+
+
+
+//listeners
 
 nav.addEventListener('mouseover', handlerNavFade.bind(0.5))
 nav.addEventListener('mouseout', handlerNavFade.bind(1))
