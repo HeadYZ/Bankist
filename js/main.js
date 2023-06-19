@@ -23,9 +23,12 @@ const navHeight = nav.getBoundingClientRect().height
 
 const allSection = document.querySelectorAll('.section')
 const allLazyImg = document.querySelectorAll('img[data-src]')
+
+//slider
 const allSlides = document.querySelectorAll('.slide')
 const sliderBtnRight = document.querySelector('.slider__btn--right')
 const sliderBtnLeft = document.querySelector('.slider__btn--left')
+const dotsContainer = document.querySelector('.dots')
 
 const openModal = e => {
 	e.preventDefault()
@@ -171,6 +174,20 @@ allLazyImg.forEach(img => {
 let curSlide = 0
 const lastSlide = allSlides.length - 1
 
+const createDots = () => {
+	allSlides.forEach((_, i) => {
+		dotsContainer.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide="${i}"></button>`)
+	})
+}
+createDots()
+
+const activeDot = slide => {
+	document.querySelectorAll('.dots__dot').forEach(dot => dot.classList.remove('dots__dot--active'))
+
+	document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active')
+}
+activeDot(0)
+
 const goToSlide = slide => {
 	allSlides.forEach((s, i) => {
 		s.style.transform = `translateX(${100 * (i - slide)}%)`
@@ -179,14 +196,16 @@ const goToSlide = slide => {
 goToSlide(0)
 
 const nextSlide = () => {
-	if (curSlide === lastSlide) curSlide = 0
+	if (+curSlide === lastSlide) curSlide = 0
 	else curSlide++
 	goToSlide(curSlide)
+	activeDot(curSlide)
 }
 const prevSlide = () => {
-	if (curSlide === 0) curSlide = lastSlide
+	if (+curSlide === 0) curSlide = lastSlide
 	else curSlide--
 	goToSlide(curSlide)
+	activeDot(curSlide)
 }
 
 //listeners
@@ -196,3 +215,12 @@ nav.addEventListener('mouseout', handlerNavFade.bind(1))
 
 sliderBtnRight.addEventListener('click', nextSlide)
 sliderBtnLeft.addEventListener('click', prevSlide)
+
+dotsContainer.addEventListener('click', e => {
+	if (e.target.classList.contains('dots__dot')) {
+		curSlide = e.target.dataset.slide
+
+		goToSlide(curSlide)
+		activeDot(curSlide)
+	}
+})
