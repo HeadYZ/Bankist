@@ -224,3 +224,5 @@ dotsContainer.addEventListener('click', e => {
 		activeDot(curSlide)
 	}
 })
+
+ 

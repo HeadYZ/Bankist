@@ -660,6 +660,11 @@ h4 {
 	opacity: 0;
 }
 
+.twitter-link {
+	text-decoration: none;
+	color: #aaa;
+}
+
 /* COOKIE MESSAGE */
 .cookie-message {
 	position: fixed;
